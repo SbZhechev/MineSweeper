@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.grid {
+    position: relative;
+    height: 400px;
+    width: 400px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.grid .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    opacity: 0.8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    pointer-events: none;
+    display: none;
+}
+
+.cell {
+    height: 40px;
+    width: 40px;
+    border: 1px solid white;
+    cursor: pointer;
+    color: white;
+    background-color: grey;
+    font-size: 20px;
+}
+
+.mine {
+    background-color: orange;
+    color: white
+}
+
+.mine.checked {
+    background-color: red;
+    color: white
+}
+
+.checked {
+    background-color: green;
+    color: white;
+}
+
+.marked {
+    background-color: blueviolet;
+}
