@@ -1,6 +1,6 @@
-const rows = 10;
-const cols = 10;
-const mines = 20;
+const rows = 8;
+const cols = 8;
+const mines = 9;
 
 function createCells(grid) {
     let cells = [];
@@ -35,7 +35,7 @@ function addMines(cells) {
         } while (minesIndices.includes(mineIndex));
 
         cells[mineIndex].classList.add('mine');
-        
+
         minesIndices.push(mineIndex);
     }
 }
@@ -47,13 +47,13 @@ function getAdjacentIndecies(index) {
 
     const topLeft = index % cols === 0 ? -1 : index - cols - 1;
     const topRight = index % cols === cols - 1 ? -1 : index - cols + 1;
-    
+
     const top = index - cols;
     const left = index % cols === 0 ? -1 : index - 1;
     const right = index % cols === cols - 1 ? -1 : index + 1;
     const bottom = index + cols;
-    
-    const bottomLeft =  index % cols === 0 ? -1 : index + cols - 1;
+
+    const bottomLeft = index % cols === 0 ? -1 : index + cols - 1;
     const bottomRight = index % cols === cols - 1 ? -1 : index + cols + 1;
 
     const indecies = [topLeft, top, topRight, left, right, bottomLeft, bottom, bottomRight];
@@ -64,11 +64,10 @@ function getAdjacentIndecies(index) {
 function calculateAdjacentMines(cells) {
     for (let index = 0; index < cells.length; index++) {
         let adjacentMines = 0;
-        
+
         // skip mines
         const cell = cells[index];
         if (cell.classList.contains('mine')) {
-            cell.innerText = adjacentMines;
             continue;
         }
 
@@ -89,14 +88,14 @@ function uncoverEmptySpaces(index, cells, checkedIndices) {
 
     adjacentCellsIndices.forEach(index => {
         const adjacentCell = cells[index];
-        
+
         const isEmpty = Number(adjacentCell.innerText) === 0;
         const isMine = adjacentCell.classList.contains('mine');
         const isMarked = adjacentCell.classList.contains('marked')
-        
+
         if (!isMarked) adjacentCell.classList.add('checked');
-        
-        
+
+
         if (isEmpty && !isMine && !isMarked) {
             uncoverEmptySpaces(index, cells, checkedIndices);
         }
@@ -111,23 +110,18 @@ function chord(cell, cells) {
     const adjacentCellsIndices = getAdjacentIndecies(cellIndex);
 
     let markedCells = 0;
-    let markedMines = 0;
+    let uncheckedCellsIndices = []
 
     adjacentCellsIndices.forEach(index => {
         const isMarked = cells[index].classList.contains('marked');
-        const isMine = cells[index].classList.contains('mine')
+        const isChecked = cells[index].classList.contains('checked');
 
         if (isMarked) markedCells++;
-        if (isMarked && isMine) markedMines++;
+        if (!isChecked && !isMarked) uncheckedCellsIndices.push(index);
     });
 
     if (markedCells === adjacentMines) {
-        if (markedCells !== markedMines) {
-            adjacentCellsIndices.forEach(index => cells[index].classList.add('checked'));
-            gameOver();
-        } else {
-            adjacentCellsIndices.forEach(index => clickCell(cells[index], cells));
-        }
+        uncheckedCellsIndices.forEach(index => clickCell(cells[index], cells));
     }
 }
 
@@ -141,7 +135,7 @@ function clickCell(cell, cells) {
         gameOver();
         return;
     }
-    
+
     if (Number(cell.innerText) !== 0) {
         checkForWin();
         return;
@@ -174,10 +168,10 @@ function handleClick(event, cells) {
         chord(clickedCell, cells);
         return;
     }
-    
+
     if (clickedCell.id && clickedCell.id === 'grid') return;
     if (clickedCell.classList.contains('marked')) return;
-    
+
     if (clickedCell.classList.contains('mine')) {
         gameOver();
         return;
@@ -202,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let cells = createCells(grid);
     addMines(cells);
     calculateAdjacentMines(cells);
-    
+
     // add 1 event listener to the whole grid for memory optimization
     // instead of adding event listener to every cell
     grid.addEventListener('click', (event) => handleClick(event, cells));
