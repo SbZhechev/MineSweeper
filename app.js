@@ -100,6 +100,8 @@ function uncoverEmptySpaces(index, cells, checkedIndices) {
             uncoverEmptySpaces(index, cells, checkedIndices);
         }
     });
+
+    checkForWin();
 }
 
 function chord(cell, cells) {
@@ -142,7 +144,6 @@ function clickCell(cell, cells) {
     }
 
     uncoverEmptySpaces(Number(cell.dataset.index), cells, []);
-    checkForWin();
 }
 
 function gameOver() {
