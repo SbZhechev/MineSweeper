@@ -76,7 +76,8 @@ function calculateAdjacentMines(cells) {
             if (cells[indexToCheck].classList.contains('mine')) adjacentMines++;
         });
 
-        cell.innerText = adjacentMines;
+        // cell.innerText = adjacentMines;
+        cell.dataset.adjacentMines = adjacentMines;
     }
 }
 
@@ -89,12 +90,14 @@ function uncoverEmptySpaces(index, cells, checkedIndices) {
     adjacentCellsIndices.forEach(index => {
         const adjacentCell = cells[index];
 
-        const isEmpty = Number(adjacentCell.innerText) === 0;
+        const isEmpty = Number(adjacentCell.dataset.adjacentMines) === 0;
         const isMine = adjacentCell.classList.contains('mine');
         const isMarked = adjacentCell.classList.contains('marked')
 
-        if (!isMarked) adjacentCell.classList.add('checked');
-
+        if (!isMarked) {
+            adjacentCell.classList.add('checked');
+            adjacentCell.innerText = adjacentCell.dataset.adjacentMines
+        }
 
         if (isEmpty && !isMine && !isMarked) {
             uncoverEmptySpaces(index, cells, checkedIndices);
@@ -132,6 +135,7 @@ function clickCell(cell, cells) {
     if (cell.classList.contains('marked')) return;
 
     cell.classList.add('checked');
+    cell.innerText = cell.dataset.adjacentMines;
 
     if (cell.classList.contains('mine')) {
         gameOver();
