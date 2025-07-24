@@ -203,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.addEventListener('click', (event) => handleClick(event, cells));
     grid.addEventListener('contextmenu', (event) => handleRightClick(event, cells));
 
-    // update styles
     // update end screens
     // add timer
     // add different difficulties
